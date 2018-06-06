@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang=>
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  
+    <link rel="icon" href="/favicon.ico">
+  
+    
+  <title>ConstraintLayout小记 | hawkinswang</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/lib/jquery.fancybox.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <header>
+  <div class="header-container">
+    <a class='logo' href="/">
+      <span>hawkinswang</span>
+    </a>
+    <ul class="right-header">
+      
+        <li class="nav-item">
+          
+            <a href="/" class="item-link">首页</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/about" class="item-link">关于</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/archives" class="item-link">归档</a>
+          
+        </li>
+      
+        <li class="nav-item">
+          
+            <a href="/tags" class="item-link">标签</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+</header>
+
+  <main id='post'>
+  <div class="content">
+    <article>
+        <section class="content markdown-body">
+          <h1>ConstraintLayout小记</h1>
+          <div class='post-meta'>
+            <i class="fa fa-calendar" aria-hidden="true"></i> <time>2018/06/06</time>
+            
+            
+          </div>
+          <p>ConstraintLayout常用知识点记录.</p>
+<blockquote>
+<p>本文主要介绍使用<code>Layout Editor</code>来编辑<code>ConstraintLayout</code>，是对Google提供的ConstaintLayout Demo的总结。</p>
+</blockquote>
+<h3 id="学完本文内容后，你将能够使用Android-Studio中的Layout-Editor构建完成如下的布局。"><a href="#学完本文内容后，你将能够使用Android-Studio中的Layout-Editor构建完成如下的布局。" class="headerlink" title="学完本文内容后，你将能够使用Android Studio中的Layout Editor构建完成如下的布局。"></a>学完本文内容后，你将能够使用Android Studio中的<code>Layout Editor</code>构建完成如下的布局。</h3><p><img src="picture\layout.png" alt=""></p>
+<p><strong>你将会到学习到如下知识</strong> </p>
+<ol>
+<li>在布局中自动约束UI元素</li>
+<li>在布局中放置元素并调整大小</li>
+<li>添加约束定位元素并将其与其他元素对其</li>
+<li>调整元素的布局尺寸和边距</li>
+<li>自动推断布局约束</li>
+<li>使用<code>barries</code>来对其动态变化大小的元素</li>
+<li>使用<code>chain</code>来定位多个元素</li>
+</ol>
+<h4 id="Layout-Editor"><a href="#Layout-Editor" class="headerlink" title="Layout Editor"></a>Layout Editor</h4><p>打开Android Studio，进入res/layout目录下，打开任意布局文件，点击<code>Design</code>标签。</p>
+<p><img src="picture\functions.png" alt=""></p>
+<p>此图片包含以下六个部分：</p>
+<ol>
+<li>Toolbar</li>
+<li>Palette</li>
+<li>Design view</li>
+<li>Blueprint view</li>
+<li>Component Tree</li>
+<li>Attributes</li>
+</ol>
+<h3 id="确定UI元素的位置及大小"><a href="#确定UI元素的位置及大小" class="headerlink" title="确定UI元素的位置及大小"></a>确定UI元素的位置及大小</h3><h4 id="1、确定UI元素的位置"><a href="#1、确定UI元素的位置" class="headerlink" title="1、确定UI元素的位置"></a>1、确定UI元素的位置</h4><p><code>ConstraintLayout</code>中的UI元素需添加约束才能确定其在界面中的位置，和<code>RelativeLayout</code>很相似，只不过<code>ContraintLayout</code>更加强大，增加了其他<code>barries</code>和<code>chain</code>等等其他功能，同时通过design可以轻松地在<code>Layout Editor</code>中进行操作.</p>
+<p>首先，何为约束，其实就是UI元素相对其他UI或者parent的位置，从而确定其在界面中的位置。每个UI元素有上下左右四个边，每个边相对其他UI元素或者parent的上下左右四个边的位置，从而有了如下的属性：</p>
+<pre><code>layout_constraintBottom_toBottomOf
+layout_constraintBottom_toTopOf
+layout_constraintEnd_toEndOf
+layout_constraintEnd_toStartOf
+layout_constraintStart_toStartOf
+layout_constraintStart_toEndOf
+layout_constraintTop_toTopOf
+layout_constraintTop_toBottomOf
+</code></pre><p>这几个属性很容易明白，以第一个为例，就是本UI元素的底部和另一个UI元素的底部对其（margin为0dp的时候，如果不为0，则第一个UI元素将高于第二个UI元素margin的值）。</p>
+<p>在<code>Layout Editor</code>中可以向如下图片所示，通过蓝图实现：<br><img src="picture\position.png" alt=""></p>
+<ol>
+<li>点击UI元素，四个边上显示出小圆圈；</li>
+<li>点击圆圈拖动到其他UI元素的边框上，这两个元素就产生了约束。</li>
+<li>在最右边<code>Attributes</code>中红色方框圈起来的地方，此处可以设置margin值，默认为8dp。</li>
+</ol>
+<p>熟悉<code>RelativeLayout</code>的童鞋应该知道还有一个<code>baseline</code>的属性值，当两个水平方向UI元素中的字体大小不一样时，设置该属性可以使两个UI元素的文字下部处于水平直线。<br><img src="picture/baseline.png" alt=""></p>
+<h4 id="2、确定UI元素的大小"><a href="#2、确定UI元素的大小" class="headerlink" title="2、确定UI元素的大小"></a>2、确定UI元素的大小</h4><p><code>ConstraintLayout</code>容器中的UI元素尺寸大小主要有以下三种方式：</p>
+<ol>
+<li>固定大小:宽高固定具体大小</li>
+<li><code>Wrap Content</code>：跟以前布局一样，包裹内容大小</li>
+<li><code>Match Constraints</code>：相当于0dp(表示填充约束中所有可用空间)，如果只是长或者宽单独设置成0dp，则该0dp不生效</li>
+</ol>
+<p>在<code>Layout Editor</code>中可以向如下图片所示，通过蓝图设置UI元素的尺寸：</p>
+<p><img src="picture/size.png" alt=""></p>
+<h4 id="自动推断布局约束"><a href="#自动推断布局约束" class="headerlink" title="自动推断布局约束"></a>自动推断布局约束</h4><p>总共有两种方法：<code>Autoconnect</code> 和<code>infer constraints</code></p>
+<ol>
+<li><code>Autoconnect</code>：点击打开自动连接按钮 <img src="picture/u.png" alt="">,拖拽UI元素到布局文件中后，会自动推断生成约束。<br>2.<code>infer constraints</code>：先关闭自动连接按钮 <img src="picture/u.png" alt="">,拖拽多个元素到布局文件，并大致排列好后，然后点击<img src="picture/infer.png" alt="">，将会自动生成整体约束布局。</li>
+</ol>
+<h4 id="4、几个特殊的属性"><a href="#4、几个特殊的属性" class="headerlink" title="4、几个特殊的属性"></a>4、几个特殊的属性</h4><ul>
+<li><p><code>ratios</code>：设置UI元素的宽高比例<br>注意：只有UI元素的宽或者高为<code>wrap content</code>或者固定值，另一边为0dp，设置才生效。<br><img src="picture/ratio.png" alt=""></p>
+</li>
+<li><p>bias：调整约束的比例<br><img src="picture/bias.gif" alt=""></p>
+</li>
+<li><p>chains：将多个view垂直或者水平关联起来，使多个view相对约束一起移动<br><img src="picture/chain.png" alt=""></p>
+</li>
+</ul>
+<h4 id="辅助工具"><a href="#辅助工具" class="headerlink" title="辅助工具"></a>辅助工具</h4><ul>
+<li><p><code>guide line</code></p>
+<p>垂直或水平的一条线，会显示当前位置的大小，方便我们绘制布局，仅仅其参照作用。</p>
+</li>
+<li><p><code>barries</code></p>
+<p><img src="picture/barriers-first.png" alt=""></p>
+<p>当布局随着本地化变化的时候，可能会出现如下问题，这时，我们就需要左边两个UI元素永远居于右边两个UI元素的左边，且不能出现交叉覆盖。<br>这个时候，barriers就能很好地为我们解决这种问题。</p>
+</li>
+</ul>
+<ol>
+<li><p>添加垂直方向的barriers；</p>
+<p><img src="picture/barriers-second.png" alt=""></p>
+</li>
+<li><p>在<code>Conponent Tree</code>中将左边两个button拽到barriers中，并且居于barriers的左边；</p>
+<p> <img src="picture/barriers-third.png" alt=""></p>
+</li>
+<li><p>右边两个EditText添加约束到barriers，这样就大功告成。</p>
+</li>
+</ol>
+<p>参考文档：<a href="https://storage.googleapis.com/clmirror/codelabs/constraint-layout/index.html#0" target="_blank" rel="noopener">https://storage.googleapis.com/clmirror/codelabs/constraint-layout/index.html#0</a></p>
+
+        </section>
+    </article>
+    
+        <!-- disqus 评论框 start -->
+        <div class="comment">
+            <div id="disqus_thread" class="disqus-thread">
+              <i>Loading comments box needs to over the wall</i>
+            </div>
+        </div>
+        <!-- disqus 评论框 end -->
+    
+        
+  </div>
+  <aside>
+    
+    <div class="toc-container">
+        <h1>目录</h1>
+        <div class="content">
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#学完本文内容后，你将能够使用Android-Studio中的Layout-Editor构建完成如下的布局。"><span class="toc-number">1.</span> <span class="toc-text">学完本文内容后，你将能够使用Android Studio中的Layout Editor构建完成如下的布局。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Layout-Editor"><span class="toc-number">1.1.</span> <span class="toc-text">Layout Editor</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#确定UI元素的位置及大小"><span class="toc-number">2.</span> <span class="toc-text">确定UI元素的位置及大小</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1、确定UI元素的位置"><span class="toc-number">2.1.</span> <span class="toc-text">1、确定UI元素的位置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、确定UI元素的大小"><span class="toc-number">2.2.</span> <span class="toc-text">2、确定UI元素的大小</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自动推断布局约束"><span class="toc-number">2.3.</span> <span class="toc-text">自动推断布局约束</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4、几个特殊的属性"><span class="toc-number">2.4.</span> <span class="toc-text">4、几个特殊的属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#辅助工具"><span class="toc-number">2.5.</span> <span class="toc-text">辅助工具</span></a></li></ol></li></ol>
+        </div>
+    </div>
+    
+  </aside>
+</main>
+
+<!-- disqus 公共JS代码 -->
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES * * */
+  var disqus_shortname = "hawkinswang";
+  var disqus_identifier = "http://yoursite.com/2018/06/06/ConstraintLayout小记/";
+  var disqus_url = "http://yoursite.com/2018/06/06/ConstraintLayout小记/";
+
+  isAgent(getDisqus)
+
+  // determine user agent in China
+  function isAgent(cb) {
+    var url = '//graph.facebook.com/feed?callback=h';
+    var xhr = new XMLHttpRequest();
+    var called = false;
+    xhr.open('GET', url);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+      called = true;
+      cb(true);
+      }
+    };
+    xhr.send();
+    // timeout 1s, this facebook API is very fast.
+    setTimeout(function() {
+      if (!called) {
+      xhr.abort();
+      cb(false)
+      }
+    }, 1000);
+  }
+
+  function getDisqus(isAgent) {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; 
+    dsq.async = true
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq)
+  }
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+  <footer>
+  <div class="copyright">
+    <div>
+      &copy; 2018 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a>&nbsp
+    </div>
+    <div>
+      Theme by <a href="https://github.com/lewis-geek/hexo-theme-Aath" target="_blank">Aath</a>
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/lib/in-view.min.js"></script>
+<script src="/lib/lodash.min.js"></script>
+<script>
+  var isDown = true
+  var oldY = 0
+  inView.offset(50)
+
+  document.body.addEventListener('touchstart', function(){});
+  
+  window.addEventListener('scroll', _.throttle(e => {
+    var currentY = window.scrollY
+    if((oldY - currentY) < 0) {
+      isDown = true
+    } else {
+      isDown = false
+    }
+    oldY = currentY
+  }, 250))
+
+  $("article img").each(function() {
+      var strA = "<a data-fancybox='gallery' href='" + this.src + "'></a>";
+      $(this).wrapAll(strA);
+  });
+
+  $('.toc-link').each(function() {
+      var href = $(this).attr("href");
+      
+      inView(href).on('exit', () => {
+        if (isDown) {
+          handleActive(href)
+        }
+      })
+
+      inView(href).on('enter', () => {
+        if (!isDown) {
+          handleActive(href)
+        }
+      })
+
+      this.onclick = function(e) {
+        var pos = $(href).offset().top - 10;
+        $("html,body").animate({scrollTop: pos}, 300);
+        setTimeout(() => {
+          handleActive(href)
+        }, 350)
+        return false
+      }
+  })
+
+  function handleActive(href) {
+    document.querySelectorAll('.toc-link').forEach(elm => {
+      elm.classList.remove('active')
+    })
+    document.querySelector(".toc [href='"+ href +"']").classList.add('active')
+  }
+</script>
+<script src="/lib/jquery.fancybox.min.js"></script>
+
+
+</body>
+</html>
