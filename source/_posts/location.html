@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>WEB唤起原生APP</title>
+</head>
+
+<body>
+<a href="javascript:void(0);" onclick="aClick()">下载或打开APP</a>
+<script>
+//window.location方式
+
+function aClick () {
+         location.href = 'schemedemo://ihongqiqu.com/test/scheme?name=google&page=1';
+         t = Date.now();
+
+         setTimeout(function(){
+            if (Date.now() - t < 1200) {
+                location.href = 'http://www.baidu.com';
+            }
+         }, 1000);
+    }
+</script>
+
+</body>
+
+</html>
